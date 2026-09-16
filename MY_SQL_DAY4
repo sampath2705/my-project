@@ -1,1 +1,326 @@
+INSERT
+------
+APP-1
+-----
+SYNTAX
+-------
+INSERT INTO TABLE-name(column-name1,column-name2,..........column-name n)
 
+
+update
+------
+update table-name set column-name= value where some condition;
+
+
+delete
+-------
+delete the records
+-------------------------------
+DROP:
+----
+Removes the table or object
+table structure+data
+table structure removed
+performance is slow(due to full removal)
+
+DELETE:
+------
+Removes specific rows from a table
+specific rows(based on condition)
+table structure intact
+performance is slower(row by row)
+
+TRUNCATE:
+---------
+removes all rows, keep structures
+all rows
+table structure intact
+performance is fast(bulk deletion)
+
+
+
+
+https://github.com/mallikharjuna2000/mysqlqueries
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2 rows in set (0.01 sec)
+
+mysql> CREATE TABLE EMPLOYEES(
+    -> EMPID CHAR(5) PRIMARY KEY,
+    -> FIRSTNAME VARCHAR(50),
+    -> LASTNAME VARCHAR(20),
+    -> AGE INT,
+    -> DOJ DATE,
+    -> ADDRESS TINYTEXT,
+    -> DEPT VARCHAR(30),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 9
+mysql> CREATE TABLE EMPLOYEES(
+    -> EMPID CHAR(5) PRIMARY KEY,
+    -> FIRSTNAME VARCHAR(50),
+    -> LASTNAME VARCHAR(20),
+    -> AGE INT,
+    -> DOJ DATE,
+    -> ADDRESS TINYTEXT,
+    -> DEPT VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> DESC_TABLE EMPLOYEES;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC_TABLE EMPLOYEES' at line 1
+mysql> DESC TABLE EMPLOYEES;
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-------+
+| id | select_type | table     | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra |
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-------+
+|  1 | SIMPLE      | EMPLOYEES | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    1 |   100.00 | NULL  |
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEES(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)
+    -> VALUES
+    -> ('S0009','SAM','JAM',23,'09-09-2026','VSP','TRAINING');
+ERROR 1292 (22007): Incorrect date value: '09-09-2026' for column 'DOJ' at row 1
+mysql> DESC EMPLOYEES;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| EMPID     | char(5)     | NO   | PRI | NULL    |       |
+| FIRSTNAME | varchar(50) | YES  |     | NULL    |       |
+| LASTNAME  | varchar(20) | YES  |     | NULL    |       |
+| AGE       | int         | YES  |     | NULL    |       |
+| DOJ       | date        | YES  |     | NULL    |       |
+| ADDRESS   | tinytext    | YES  |     | NULL    |       |
+| DEPT      | varchar(30) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEES(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)
+    -> VALUES
+    -> ('S0009','SAM','JAM',23,'09-09-2026','VSP','TRAINING');
+ERROR 1292 (22007): Incorrect date value: '09-09-2026' for column 'DOJ' at row 1
+mysql> INSERT INTO EMPLOYEES(EMPID,FIRSTNAME,LASTNAME,AGE,DOJ,ADDRESS,DEPT)
+    -> VALUES
+    -> ('S0009','SAM','JAM',23,'2026-09-09','VSP','TRAINEE');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+---------+---------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS | DEPT    |
++-------+-----------+----------+------+------------+---------+---------+
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP     | TRAINEE |
++-------+-----------+----------+------+------------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEES
+    -> VALUES
+    -> ('S0008','BLACK','LABEL',28,'1899-08-08','SCOTLAND','WHISKEY'),
+    -> ('S0007','RED','LABEL',29,'1899-07-07','LONDON','WHISKEYY');
+Query OK, 2 rows affected (0.07 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0007 | RED       | LABEL    |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | LABEL    |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEES(EMPID,LASTNAME,DOJ,ADDRESS,DEPT)
+    -> VALUES
+    -> ('S0006','VAT','2026-09-09','GERMAN','WHISKEY');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0006 | NULL      | VAT      | NULL | 2026-09-09 | GERMAN   | WHISKEY  |
+| S0007 | RED       | LABEL    |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | LABEL    |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEES SET LASTNAME='WINE' WHERE LASTNAME='LABEL';
+Query OK, 2 rows affected (0.08 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0006 | NULL      | VAT      | NULL | 2026-09-09 | GERMAN   | WHISKEY  |
+| S0007 | RED       | WINE     |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | WINE     |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE LASTNAME IS NULL;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE FIRST IS NULL;
+ERROR 1054 (42S22): Unknown column 'FIRST' in 'where clause'
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE 'FIRST' IS NULL;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE 'FIRSTNAME' IS NULL;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE 'FIRSTNAME' IS NULL;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEES SET FIRSTNAME = 'BLUE' WHERE FIRSTNAME IS NULL;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0006 | BLUE      | VAT      | NULL | 2026-09-09 | GERMAN   | WHISKEY  |
+| S0007 | RED       | WINE     |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | WINE     |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEES SET AGE = 25 WHERE AGE IS NULL;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0006 | BLUE      | VAT      |   25 | 2026-09-09 | GERMAN   | WHISKEY  |
+| S0007 | RED       | WINE     |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | WINE     |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | VSP      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEES SET ADDRESS = 'BLR' WHERE DEPT='TRAINEE';
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0006 | BLUE      | VAT      |   25 | 2026-09-09 | GERMAN   | WHISKEY  |
+| S0007 | RED       | WINE     |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | WINE     |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | BLR      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> delete from employees where empid='s0006';
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select*from employees;
++-------+-----------+----------+------+------------+----------+----------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS  | DEPT     |
++-------+-----------+----------+------+------------+----------+----------+
+| S0007 | RED       | WINE     |   29 | 1899-07-07 | LONDON   | WHISKEYY |
+| S0008 | BLACK     | WINE     |   28 | 1899-08-08 | SCOTLAND | WHISKEY  |
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | BLR      | TRAINEE  |
++-------+-----------+----------+------+------------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> delete from employees where lastname='wine';
+Query OK, 2 rows affected (0.07 sec)
+
+mysql> select*from employees
+    -> select*from employees;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select*from employees' at line 2
+mysql> select*from employees;
++-------+-----------+----------+------+------------+---------+---------+
+| EMPID | FIRSTNAME | LASTNAME | AGE  | DOJ        | ADDRESS | DEPT    |
++-------+-----------+----------+------+------------+---------+---------+
+| S0009 | SAM       | JAM      |   23 | 2026-09-09 | BLR     | TRAINEE |
++-------+-----------+----------+------+------------+---------+---------+
+1 row in set (0.00 sec)
+
+
+
+mysql> CREATE TABLE employees (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(100),
+    ->     department VARCHAR(50),
+    ->     job_role VARCHAR(50),
+    ->     salary DECIMAL(10,2),
+    ->     joining_date DATE,
+    ->     city VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> DESC EMPLOYEES;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| emp_id       | int           | NO   | PRI | NULL    |       |
+| emp_name     | varchar(100)  | YES  |     | NULL    |       |
+| department   | varchar(50)   | YES  |     | NULL    |       |
+| job_role     | varchar(50)   | YES  |     | NULL    |       |
+| salary       | decimal(10,2) | YES  |     | NULL    |       |
+| joining_date | date          | YES  |     | NULL    |       |
+| city         | varchar(50)   | YES  |     | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO employees
+    -> (emp_id, emp_name, department, job_role, salary, joining_date, city)
+    -> VALUES
+    -> (101, 'Ravi Kumar', 'IT', 'Developer', 45000, '2023-01-15', 'Vizag'),
+    -> (102, 'Priya Sharma', 'HR', 'HR Manager', 55000, '2022-06-20', 'Hyderabad'),
+    -> (103, 'Kiran Reddy', 'IT', 'Tester', 40000, '2023-03-10', 'Vizag'),
+    -> (104, 'Sneha Rao', 'Finance', 'Accountant', 48000, '2021-11-25', 'Chennai'),
+    -> (105, 'Arun Kumar', 'IT', 'Developer', 60000, '2020-08-18', 'Bangalore'),
+    -> (106, 'Divya Reddy', 'HR', 'Recruiter', 35000, '2024-01-05', 'Vizag'),
+    -> (107, 'Suresh Babu', 'Sales', 'Executive', 42000, '2022-09-12', 'Hyderabad'),
+    -> (108, 'Anjali Devi', 'IT', 'Developer', 70000, '2019-05-30', 'Chennai'),
+    -> (109, 'Mahesh Kumar', 'Sales', 'Manager', 65000, '2020-02-14', 'Bangalore'),
+    -> (110, 'Lakshmi Rao', 'Finance', 'Analyst', 52000, '2023-07-22', 'Hyderabad');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++--------+--------------+------------+------------+----------+--------------+-----------+
+| emp_id | emp_name     | department | job_role   | salary   | joining_date | city      |
++--------+--------------+------------+------------+----------+--------------+-----------+
+|    101 | Ravi Kumar   | IT         | Developer  | 45000.00 | 2023-01-15   | Vizag     |
+|    102 | Priya Sharma | HR         | HR Manager | 55000.00 | 2022-06-20   | Hyderabad |
+|    103 | Kiran Reddy  | IT         | Tester     | 40000.00 | 2023-03-10   | Vizag     |
+|    104 | Sneha Rao    | Finance    | Accountant | 48000.00 | 2021-11-25   | Chennai   |
+|    105 | Arun Kumar   | IT         | Developer  | 60000.00 | 2020-08-18   | Bangalore |
+|    106 | Divya Reddy  | HR         | Recruiter  | 35000.00 | 2024-01-05   | Vizag     |
+|    107 | Suresh Babu  | Sales      | Executive  | 42000.00 | 2022-09-12   | Hyderabad |
+|    108 | Anjali Devi  | IT         | Developer  | 70000.00 | 2019-05-30   | Chennai   |
+|    109 | Mahesh Kumar | Sales      | Manager    | 65000.00 | 2020-02-14   | Bangalore |
+|    110 | Lakshmi Rao  | Finance    | Analyst    | 52000.00 | 2023-07-22   | Hyderabad |
++--------+--------------+------------+------------+----------+--------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql>
+mysql>
